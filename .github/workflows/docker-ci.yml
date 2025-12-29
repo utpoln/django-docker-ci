@@ -42,9 +42,11 @@ jobs:
           docker stop django-app || true
           docker rm django-app || true
 
-          # Run new container, mount your folder
+          # Run new container
           docker run -d \
             --name django-app \
-            -p 80:8000 \
+            --restart unless-stopped \
+            -p 8090:8000 \
             -v /usr/share/nginx/html/django_docker_test:/app \
             ${{ secrets.DOCKER_IMAGE }}
+
