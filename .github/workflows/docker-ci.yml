@@ -1,0 +1,33 @@
+name: Django Docker CI
+
+# Run workflow on push to main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code
+      - uses: actions/checkout@v3
+
+      # Step 2: Set up Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Step 3: Build Docker image
+      - name: Build Docker image
+        run: docker build -t django-app .
+
+      # Step 4: Run Django checks
+      - name: Run Django check
+        run: docker run --rm django-app python manage.py check
+
+      # Optional: Run tests
+      - name: Run Django tests
+        run: docker run --rm django-app python manage.py test
+
