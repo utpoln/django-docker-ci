@@ -35,18 +35,13 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         password: ${{ secrets.SSH_PASSWORD }}
         script: |
-          # Pull latest Docker image
           docker pull ${{ secrets.DOCKER_IMAGE }}
-
-          # Stop and remove old container (if exists)
           docker stop django-app || true
           docker rm django-app || true
-
-          # Run new container
           docker run -d \
             --name django-app \
             --restart unless-stopped \
             -p 8090:8000 \
-            -v /usr/share/nginx/html/django_docker_test:/app \
             ${{ secrets.DOCKER_IMAGE }}
+
 
